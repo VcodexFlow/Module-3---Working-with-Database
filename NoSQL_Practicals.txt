@@ -1,0 +1,57 @@
+
+Dataset example (for reference):
+[
+  { "name": "Alice Johnson", "age": 30, "department": "HR", "salary": 60000, "joining_date": "2019-05-15" },
+  { "name": "Bob Smith", "age": 40, "department": "IT", "salary": 80000, "joining_date": "2015-08-20" },
+  ...
+1. Retrieve all employee records.
+
+db.employees.find().pretty();
+
+--------------------------------------------------------------------------
+
+2. Find employees who work in the IT department.
+
+db.employees.find({ department: "IT" }).pretty();
+
+--------------------------------------------------------------------------
+
+3. Find employees who have a salary greater than 70,000.
+
+db.employees.find({ salary: { $gt: 70000 } }).pretty();
+
+--------------------------------------------------------------------------
+
+4. Find employees who joined after 2018.
+
+db.employees.find({ joining_date: { $gt: "2018-12-31" } }).pretty();
+
+Alternatively, if stored as ISODate:
+
+   db.employees.find({ joining_date: { $gt: ISODate("2018-12-31") } })
+
+--------------------------------------------------------------------------
+
+5. Find employees between the ages of 30 and 40.
+
+db.employees.find({ age: { $gte: 30, $lte: 40 } }).pretty();
+
+--------------------------------------------------------------------------
+
+6. Increase the salary of all employees in the Finance department by 5%.
+
+db.employees.updateMany(
+  { department: "Finance" },
+  [{ $set: { salary: { $multiply: ["$salary", 1.05] } } }]
+);
+
+--------------------------------------------------------------------------
+
+7. Delete employees who joined before 2010.
+
+db.employees.deleteMany({ joining_date: { $lt: "2010-01-01" } });
+
+--------------------------------------------------------------------------
+
+8. Find the highest-paid employee
+db.employees.find().sort({ salary: -1 }).limit(1).pretty();
